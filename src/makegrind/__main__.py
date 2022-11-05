@@ -14,7 +14,7 @@
 import datetime
 import os
 import sys
-import glob
+import from pathlib import Path
 import multiprocessing as mp
 import logging
 
@@ -69,7 +69,7 @@ def find_json_files(ctx, param, value):
             paths.append(path)
         else:
             paths.extend(
-                glob.glob(os.path.join(path, "**", "build.*.json"), recursive=True)
+                paths.extend([str(file) for file in Path(path).rglob("build.*.json")])
             )
 
     if not paths:
