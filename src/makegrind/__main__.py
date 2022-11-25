@@ -14,7 +14,7 @@
 import datetime
 import os
 import sys
-import from pathlib import Path
+from pathlib import Path
 import multiprocessing as mp
 import logging
 
