@@ -139,6 +139,21 @@ def callgrind(graph, outfile):
 
 @main.command()
 @click.option(
+    "-o",
+    "--output",
+    "outfile",
+    type=click.File("w"),
+    default="chrome_tracing.out.targets",
+)
+@click.pass_obj
+def chrome_tracing(graph, outfile):
+    """Generate a single chrome-traching-formatted file from combined build.json files"""
+    logging.info("Generating chrome-traching file")
+    makegrind.dump_chrome_tracing(graph, outfile)
+
+
+@main.command()
+@click.option(
     "-t",
     "--target",
     help="Ensure target is within the path found. Formatted as TARGET:MAKEFILE:PID",
