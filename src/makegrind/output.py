@@ -13,8 +13,9 @@
 # limitations under the License.
 
 import datetime
+import json
 
-__all__ = ["dump_callgrind"]
+__all__ = ["dump_callgrind", "dump_chrome_tracing"]
 
 
 def dump_callgrind(graph, fd):
@@ -58,3 +59,46 @@ def dump_callgrind(graph, fd):
                     round(dep.elapsed / datetime.timedelta(microseconds=1)),
                 )
             )
+
+
+def dump_chrome_tracing(graph, fd):
+    data = []
+
+    def process(node, seen=set()):
+        if node.key not in seen:
+            seen.add(node.key)
+
+            categories = []
+            if node.file is None:
+                categories.append("file")
+            else:
+                categories.append("target")
+                if node.recipe:
+                    categories.append("recipe")
+
+            data.append(
+                {
+                    "name": node.target,
+                    "ph": "B",
+                    "cat": ",".join(categories),
+                    "ts": round(node.start.timestamp() * 1000000),
+                    "pid": node.pid,
+                }
+            )
+
+            for child in node.successors.values():
+                process(child)
+
+            data.append(
+                {
+                    "name": node.target,
+                    "ph": "E",
+                    "ts": round(node.end.timestamp() * 1000000),
+                    "pid": node.pid,
+                }
+            )
+
+    for node in graph.entry.entry:
+        process(graph.targets.info(node))
+
+    json.dump(data, fd, indent=2)

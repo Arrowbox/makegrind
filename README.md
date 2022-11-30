@@ -24,7 +24,10 @@ to display possible options.
 * paths: Generates listing of dependency path taking the longest time
 * dirs: Generates statistics over each directory
 * recipes: Generates statistics on recipes taking the longest time
-* callgrind: Generates an aggregate callgrind.out file
+* callgrind: Generates an aggregate callgrind.out.target file
+* chrome-tracing: Generates an aggregate chrome-tracing.out.targets file
+  * You can view this either by using `chrome://tracing/` in your Chrome browser
+    or visiting https://www.speedscope.app/.
 
 ## Reports
 
