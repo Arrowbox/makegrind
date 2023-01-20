@@ -68,9 +68,7 @@ def find_json_files(ctx, param, value):
         if os.path.isfile(path):
             paths.append(path)
         else:
-            paths.extend(
-                paths.extend([str(file) for file in Path(path).rglob("build.*.json")])
-            )
+            paths.extend([str(file) for file in Path(path).rglob("build.*.json")])
 
     if not paths:
         raise click.BadParameter(
